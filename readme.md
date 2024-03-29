@@ -5,7 +5,7 @@
 ## Setup Instructions
 
 ## Clone the Repository:
-git clone <repo_link>
+git clone <repository_link>
 
 ## Install Dependencies:
 pip install -r requirements.txt
