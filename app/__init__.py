@@ -2,10 +2,13 @@ import os
 import pkgutil
 import importlib
 import sys
-from app.commands import CommandHandler, Command
 from dotenv import load_dotenv
 import logging
 import logging.config
+from app.commands import CommandHandler
+from app.commands import Command
+from app.history import CalculationHistory
+
 
 class App:
     def __init__(self):
@@ -28,9 +31,6 @@ class App:
         settings = {key: value for key, value in os.environ.items()}
         logging.info("Environment variables loaded.")
         return settings
-
-    def get_environment_variable(self, env_var: str = 'ENVIRONMENT'):
-        return self.settings.get(env_var, None)
 
     def load_plugins(self):
         plugins_package = 'app.plugins'
@@ -56,15 +56,20 @@ class App:
 
     def start(self):
         self.load_plugins()
+        historyinstance = CalculationHistory()
         logging.info("Application started. Type 'exit' to exit.")
         try:
             while True:
                 cmd_input = input(">>> ").strip()
                 if cmd_input.lower() == 'exit':
                     logging.info("Application exit.")
+                    historyinstance.save_history()
                     sys.exit(0)  # Use sys.exit(0) for a clean exit, indicating success.
                 try:
-                    self.command_handler.execute_command(cmd_input)
+                    if cmd_input.lower() == 'menu':
+                        self.command_handler.execute_command(cmd_input,self.command_handler)
+                    else:
+                        self.command_handler.execute_command(cmd_input,historyinstance)
                 except KeyError:  # Assuming execute_command raises KeyError for unknown commands
                     logging.error(f"Unknown command: {cmd_input}")
                     sys.exit(1)  # Use a non-zero exit code to indicate failure or incorrect command.
@@ -73,7 +78,6 @@ class App:
             sys.exit(0)  # Assuming a KeyboardInterrupt should also result in a clean exit.
         finally:
             logging.info("Application shutdown.")
-
 
 if __name__ == "__main__":
     app = App()

@@ -1,3 +1,4 @@
+import logging
 from app.commands import Command
 
 class AddCommand(Command):

@@ -1,4 +1,5 @@
 import pandas as pd
+import logging
 import os
 
 class CalculationHistory:
@@ -8,23 +9,38 @@ class CalculationHistory:
 
     def load_history(self):
         if os.path.exists(self.csv_file):
-            return pd.read_csv(self.csv_file)
+            try:
+                return pd.read_csv(self.csv_file)
+            except Exception as e:
+                print(f"Error loading history from CSV: {e}")
+                return pd.DataFrame(columns=['Operation', 'Value1', 'Value2'])
         else:
             return pd.DataFrame(columns=['Operation', 'Value1', 'Value2'])
 
     def save_history(self):
-        self.history_df.to_csv(self.csv_file, index=False)
+        try:
+            self.history_df.to_csv(self.csv_file, index=False)
+            print(f"History saved to CSV at '{self.csv_file}'.")
+        except Exception as e:
+            print(f"Error saving history to CSV: {e}")
 
     def add_record(self, operation, value1, value2):
-        self.history_df = self.history_df.append({'Operation': operation,
-                                                  'Value1': value1,
-                                                  'Value2': value2
-        },
-                                                 ignore_index=True)
+        self.history_df = self.load_history()
+        new_record = pd.DataFrame({'Operation': [operation], 'Value1': [value1], 'Value2': [value2]})
+        self.history_df = pd.concat([self.history_df, new_record], ignore_index=True)
+        self.save_history()
 
     def clear_history(self):
         self.history_df = pd.DataFrame(columns=['Operation', 'Value1', 'Value2'])
+        self.save_history()
+        self.history_df = self.load_history()
 
     def delete_record(self, index):
-        self.history_df.drop(index=index, inplace=True)
-
+        try:
+            self.history_df.drop(index=index, inplace=True)
+            print(f"Record at index {index} deleted from history.")
+            self.save_history()
+            self.history_df = self.load_history()
+        except Exception as e:
+            print(f"Error deleting record from history: {e}")
+  

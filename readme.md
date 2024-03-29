@@ -1,104 +1,108 @@
-# Advanced Python Calculator for Software Engineering Graduate Course
+# Calculator program
 
-## Project Overview
+## DEMONSTRATION VIDEO :  
 
-This midterm requires the development of an advanced Python-based calculator application. Designed to underscore the importance of professional software development practices, the application integrates clean, maintainable code, the application of design patterns, comprehensive logging, dynamic configuration via environment variables, sophisticated data handling with Pandas, and a command-line interface (REPL) for real-time user interaction.
-## Instructor Video - [here](https://youtu.be/hu9YFdeSkV8)
+## Clone the Repository:
+git clone [repository_link]
 
-## Project Submission
+## Navigate to the Project Directory:
+cd calculator_project
 
-- Create a NEW repository from scratch and transfer any relevant work as you complete the assignment, **you need to show a clear history of work through your commits, or your project could be given as low as a 0 for not showing your work.**
-- Submit through a GitHub repository link containing the necessary documentation, configuration examples, and a coherent commit history.
-- You are required to write a short description and link to your implememtation of the design patterns you use.
-- You need to provide a description of how you used environment variables and link to your code to illustrate.
--  You need to explain and link to how you are using logging.
--  You need to link to and explain how you are using try/catch / exceptions to illustrate  "Look Before You Leap" (LBYL) and "Easier to Ask for Forgiveness than Permission" (EAFP)/
-- Create a 3-5 minute video demonstration of using the calculator, highlighting its key features and functionalities. Link the video to the repository readme.
--  Submit a link to your repository to Canvas.  
--  Keep your repository private while working on it, so people don't copy your work.  Make the repository public within a day of the project being due, so we can grade it.
-- **REQUIRED - YOU MUST USE GITHUB ACTIONS AND YOUR CODE MUST PASS ALL THE TESTS ON GITHUB**
+## Install Dependencies: 
+pip install -r requirements.txt
 
-## Core Functionalities
+## Run the Application:
+python main.py
 
-### Command-Line Interface (REPL)
+## Calculator Commands:
 
-Implement a Read-Eval-Print Loop (REPL) to facilitate direct interaction with the calculator. This interface should support:
-- Execution of arithmetic operations (Add, Subtract, Multiply, and Divide)
-- Management of calculation history.
-- Access to extended functionalities through dynamically loaded plugins.
+Use commands like add, subtract, multiply, and divide to perform arithmetic operations.
+Use the menu command to list all available commands.
+Use the load command to view calculation history.
+Use the clear command to clear the entire history.
+Use the delete command to delete specific records from history.
 
-### Plugin System
+## example usage
 
-Create a flexible plugin system to allow seamless integration of new commands or features. This system should:
-- Dynamically load and integrate plugins without modifying the core application code.
-- Include a REPL  "Menu" command to list all available plugin commands, ensuring user discoverability and interaction.
+Addition Operation:
 
-### Calculation History Management with Pandas
+Type the command 'add' in the REPL command interface.
+Enter the numbers when asked in the interface.
+It computes and prints the result.
 
-Utilize Pandas to manage a robust calculation history, enabling users to:
-- Load, save, clear, and delete history records through the REPL interface.
+>>> add
+Enter the first number: 5
+Enter the second number: 4
+Result: 9.0
+
+Other Operations:
+
+subtract for subtraction
+multiply for multiplication
+divide for division
+
+## Commands for Calculation History
+
+load : 
+It retrieves all the data from the .csv file
+
+>>> load
+Data history of calculator:  Operation  Value1  Value2
+1   multilpy     3.0     2.0
+2   divide     6.0     2.0
+3   divide     6.0     0.0
+
+Clear:
+
+It deletes the stored history
+ 
+>>> clear
+Calculation history cleared successfully
+
+Delete:
+
+It deletes a particular row in the history by the ID field
+
+>>> delete
+entered the index to delete: 1
+Record at index 1 deleted from history. Operation  Value1  Value2
+2   multiply     3.0     2.0
+3   divide     6.0     2.0
+4   divide     6.0     0.0
+
+## Testing with Pytest:
+
+Run pytest to execute the unit tests:
+pytest
+
+## Command Pattern:
+
+The Command pattern is utilized to encapsulate each operation (addition, subtraction, multiplication, division) as a separate command object.
+Each command object has an execute method that performs the corresponding operation when invoked.
+This pattern allows you to decouple the requester (user input or menu selection) from the concrete operations, promoting flexibility and extensibility.
+
+## Facade Pattern:
+
+The Facade pattern is applied in the CalculationHistory class, which acts as a simplified interface for managing calculation history.
+The class provides high-level methods such as add_record, clear_history, delete_record, etc., hiding the complexity of interacting with the underlying data structures (e.g., CSV files managed using pandas).
+By encapsulating the logic for history management, the Facade pattern promotes code readability and maintainability.
+
+## Factory Method Pattern:
+
+The Factory Method pattern is employed in dynamically loading and integrating plugins without modifying the core application code.
+The load_plugin method in the application's initialization dynamically loads new plugins based on configuration or external input.
+This pattern allows for the addition of new functionality (e.g., new calculator operations) without the need to modify existing code, enhancing the application's scalability.
+
+## Singleton Pattern:
+
+The Singleton pattern ensures that there is only one instance of the MenuCommand class throughout the application.
+This pattern restricts the instantiation of the class to a single instance, providing a global point of access to the menu command functionality.
+Singleton pattern ensures that the application's menu command remains consistent and coherent across different parts of the system.
+
+## EAFP (Easier to Ask for Forgiveness than Permission) 
+Is a programming philosophy or approach commonly associated with Python programming. The EAFP principle emphasizes writing code that assumes the validity of operations and handles exceptions when they occur, rather than explicitly checking for conditions before performing an action.
 
 
-### Professional Logging Practices
-
-Establish a comprehensive logging system to record:
-- Detailed application operations, data manipulations, errors, and informational messages.
-- Differentiate log messages by severity (INFO, WARNING, ERROR) for effective monitoring.
-- Dynamic logging configuration through environment variables for levels and output destinations.
-
-### Advanced Data Handling with Pandas
-
-Employ Pandas for:
-- Efficient data reading and writing to CSV files.
-- Managing calculation history.
-
-### Design Patterns for Scalable Architecture
-
-Incorporate key design patterns to address software design challenges, including:
-- **Facade Pattern:** Offer a simplified interface for complex Pandas data manipulations.
-- **Command Pattern:** Structure commands within the REPL for effective calculation and history management.
-- **Factory Method, Singleton, and Strategy Patterns:** Further enhance the application's code structure, flexibility, and scalability.
-
-## Development, Testing, and Documentation Requirements
-
-### Testing and Code Quality
-
-- Achieve a minimum of 90% test coverage with Pytest.
-- Ensure code quality and adherence to PEP 8 standards, verified by Pylint.
-
-### Version Control Best Practices
-
-- Utilize logical commits that clearly group feature development and corresponding tests, evidencing clear development progression.
-
-### Comprehensive Documentation
-
-- Compile detailed documentation in `README.md`, covering setup instructions, usage examples, and an in-depth analysis of architectural decisions, particularly emphasizing the implementation and impact of chosen design patterns and the logging strategy.
 
 
-## Evaluation Criteria
-
-### Total Points: 100
-
-#### Functionality (40 Points)
-
-- **Calculator Operations:** 20 points for implementing basic and statistical operations.
-- **History Management:** 10 points for effective management using Pandas.
-- **Configuration via Environment Variables:** 5 points for flexible application configuration.
-- **REPL Interface:** 5 points for a user-friendly command-line interface.
-
-#### Design Patterns (20 Points)
-
-- **Implementation and Application:** 10 points for the effective use of design patterns.
-- **Documentation and Explanation:** 10 points for thorough documentation of design pattern rationale and implementation.
-
-#### Testing and Code Quality (20 Points)
-
-- **Comprehensive Testing with Pytest:** 10 points for extensive test coverage.
-- **Code Quality and Adherence to Standards:** 10 points for clean, maintainable code.
-
-#### Version Control, Documentation, and Logging (20 Points)
-
-- **Commit History:** 10 points for logical and informative commit messages.
-- **README Documentation:** 5 points for comprehensive setup and usage instructions.
-- **Logging Practices:** 5 points for implementing adaptable and informative logging.
 

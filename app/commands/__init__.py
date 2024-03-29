@@ -5,23 +5,16 @@ class Command(ABC):
     def execute(self):
         pass
 
+
 class CommandHandler:
     def __init__(self):
         self.commands = {}
 
-    def register_command(self, command_name: str, command: Command):
+    def register_command(self, command_name, command):
         self.commands[command_name] = command
 
-    def execute_command(self, command_name: str):
-        """ Look before you leap (LBYL) - Use when its less likely to work
+    def execute_command(self, command_name, instance):
         if command_name in self.commands:
-            self.commands[command_name].execute()
+            self.commands[command_name].execute(instance)  # Assuming execute() method exists in your command object
         else:
-            print(f"No such command: {command_name}")
-        """
-        """Easier to ask for forgiveness than permission (EAFP) - Use when its going to most likely work"""
-        try:
-            self.commands[command_name].execute()
-        except KeyError:
-            print(f"No such command: {command_name}")
-
+            raise KeyError(f"Command '{command_name}' not found.")
